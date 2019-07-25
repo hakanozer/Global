@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +25,7 @@ public class UserRestController {
 	List<User> ls = new ArrayList<>();
 	
 	@RequestMapping(value = "/allUser", method = RequestMethod.GET)
+	@Cacheable("allUserCache")
 	public HashMap<String, Object> allUser() {
 		HashMap<String, Object> hm = new HashMap<>();
 		hm.put("statu", true);
@@ -33,7 +35,7 @@ public class UserRestController {
 		
 		// json Retrtofit
 		Services services = API.getClient().create(Services.class);
-		Call<JsonProduct> dt = services.allProduct(10);
+		Call<JsonProduct> dt = services.allProduct();
 		 try {
 			Response<JsonProduct> rs =  dt.execute();
 			String desc = rs.body().getProducts().get(0).getBilgiler().get(0).getDescription();
